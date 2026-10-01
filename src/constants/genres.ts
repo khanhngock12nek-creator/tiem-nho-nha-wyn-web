@@ -1,0 +1,50 @@
+export const GENRES_LIST = [
+  'Thanh mai trúc mã',
+  'Thanh xuân vườn trường',
+  'Văn nhã bại hoại',
+  'R18',
+  'R21',
+  'Ngụy côn trùng',
+  'Oan gia',
+  'Vừa hận phải yêu',
+  'Ngược luyến tàn tâm',
+  'cổ trang',
+  'Game thủ',
+  'Ngoài lạnh trong nóng',
+  'Chữa lành',
+  'Nuông chiều',
+  'Ngọt sủng',
+  'Boy phố',
+  'Tổng tài',
+  'Cún con nuôi vợ từ bé',
+  'Chiếm hữu',
+  'hài hước',
+  'hiện đại'
+] as const;
+
+export type GenreType = typeof GENRES_LIST[number];
+
+// Genre visual styling hints
+export const GENRE_THEMES: Record<string, { bgLight: string; textLight: string; borderLight: string; bgDark: string; textDark: string; borderDark: string }> = {
+  'Thanh mai trúc mã': { bgLight: 'bg-rose-50', textLight: 'text-rose-700', borderLight: 'border-rose-200', bgDark: 'dark:bg-rose-950/40', textDark: 'dark:text-rose-300', borderDark: 'dark:border-rose-800' },
+  'Thanh xuân vườn trường': { bgLight: 'bg-emerald-50', textLight: 'text-emerald-700', borderLight: 'border-emerald-200', bgDark: 'dark:bg-emerald-950/40', textDark: 'dark:text-emerald-300', borderDark: 'dark:border-emerald-800' },
+  'Văn nhã bại hoại': { bgLight: 'bg-indigo-50', textLight: 'text-indigo-700', borderLight: 'border-indigo-200', bgDark: 'dark:bg-indigo-950/40', textDark: 'dark:text-indigo-300', borderDark: 'dark:border-indigo-800' },
+  'R18': { bgLight: 'bg-red-50', textLight: 'text-red-700', borderLight: 'border-red-200', bgDark: 'dark:bg-red-950/40', textDark: 'dark:text-red-300', borderDark: 'dark:border-red-800' },
+  'R21': { bgLight: 'bg-purple-50', textLight: 'text-purple-700', borderLight: 'border-purple-200', bgDark: 'dark:bg-purple-950/40', textDark: 'dark:text-purple-300', borderDark: 'dark:border-purple-800' },
+  'Ngụy côn trùng': { bgLight: 'bg-amber-50', textLight: 'text-amber-700', borderLight: 'border-amber-200', bgDark: 'dark:bg-amber-950/40', textDark: 'dark:text-amber-300', borderDark: 'dark:border-amber-800' },
+  'Oan gia': { bgLight: 'bg-orange-50', textLight: 'text-orange-700', borderLight: 'border-orange-200', bgDark: 'dark:bg-orange-950/40', textDark: 'dark:text-orange-300', borderDark: 'dark:border-orange-800' },
+  'Vừa hận phải yêu': { bgLight: 'bg-pink-50', textLight: 'text-pink-700', borderLight: 'border-pink-200', bgDark: 'dark:bg-pink-950/40', textDark: 'dark:text-pink-300', borderDark: 'dark:border-pink-800' },
+  'Ngược luyến tàn tâm': { bgLight: 'bg-stone-100', textLight: 'text-stone-700', borderLight: 'border-stone-300', bgDark: 'dark:bg-stone-900', textDark: 'dark:text-stone-300', borderDark: 'dark:border-stone-700' },
+  'cổ trang': { bgLight: 'bg-amber-50', textLight: 'text-amber-800', borderLight: 'border-amber-200', bgDark: 'dark:bg-amber-950/40', textDark: 'dark:text-amber-300', borderDark: 'dark:border-amber-800' },
+  'Game thủ': { bgLight: 'bg-cyan-50', textLight: 'text-cyan-700', borderLight: 'border-cyan-200', bgDark: 'dark:bg-cyan-950/40', textDark: 'dark:text-cyan-300', borderDark: 'dark:border-cyan-800' },
+  'Ngoài lạnh trong nóng': { bgLight: 'bg-sky-50', textLight: 'text-sky-700', borderLight: 'border-sky-200', bgDark: 'dark:bg-sky-950/40', textDark: 'dark:text-sky-300', borderDark: 'dark:border-sky-800' },
+  'Chữa lành': { bgLight: 'bg-teal-50', textLight: 'text-teal-700', borderLight: 'border-teal-200', bgDark: 'dark:bg-teal-950/40', textDark: 'dark:text-teal-300', borderDark: 'dark:border-teal-800' },
+  'Nuông chiều': { bgLight: 'bg-rose-50', textLight: 'text-rose-700', borderLight: 'border-rose-200', bgDark: 'dark:bg-rose-950/40', textDark: 'dark:text-rose-300', borderDark: 'dark:border-rose-800' },
+  'Ngọt sủng': { bgLight: 'bg-pink-50', textLight: 'text-pink-600', borderLight: 'border-pink-200', bgDark: 'dark:bg-pink-950/40', textDark: 'dark:text-pink-300', borderDark: 'dark:border-pink-800' },
+  'Boy phố': { bgLight: 'bg-zinc-100', textLight: 'text-zinc-800', borderLight: 'border-zinc-300', bgDark: 'dark:bg-zinc-900', textDark: 'dark:text-zinc-200', borderDark: 'dark:border-zinc-700' },
+  'Tổng tài': { bgLight: 'bg-slate-100', textLight: 'text-slate-800', borderLight: 'border-slate-300', bgDark: 'dark:bg-slate-900', textDark: 'dark:text-slate-200', borderDark: 'dark:border-slate-700' },
+  'Cún con nuôi vợ từ bé': { bgLight: 'bg-yellow-50', textLight: 'text-yellow-700', borderLight: 'border-yellow-200', bgDark: 'dark:bg-yellow-950/40', textDark: 'dark:text-yellow-300', borderDark: 'dark:border-yellow-800' },
+  'Chiếm hữu': { bgLight: 'bg-crimson-50', textLight: 'text-red-800', borderLight: 'border-red-300', bgDark: 'dark:bg-red-950/60', textDark: 'dark:text-red-300', borderDark: 'dark:border-red-800' },
+  'hài hước': { bgLight: 'bg-lime-50', textLight: 'text-lime-700', borderLight: 'border-lime-200', bgDark: 'dark:bg-lime-950/40', textDark: 'dark:text-lime-300', borderDark: 'dark:border-lime-800' },
+  'hiện đại': { bgLight: 'bg-blue-50', textLight: 'text-blue-700', borderLight: 'border-blue-200', bgDark: 'dark:bg-blue-950/40', textDark: 'dark:text-blue-300', borderDark: 'dark:border-blue-800' },
+};

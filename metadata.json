@@ -1,0 +1,6 @@
+{
+  "name": "Tiệm Nhỏ Nhà Wyn",
+  "description": "Tiệm Nhỏ Nhà Wyn - Thế giới nhân vật, quay gacha may mắn, bảng xếp hạng và nơi gửi thư tâm tình ngọt ngào.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

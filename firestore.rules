@@ -1,0 +1,185 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // --- HARDENED HELPERS ---
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isSignedIn() { return request.auth != null; }
+    
+    // Bootstrapped Admin check using the developer's email
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.email == "khanhngock12nek@gmail.com" && request.auth.token.email_verified == true;
+    }
+
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // --- ENTITY VALIDATORS ---
+
+    function isValidCharacter(data) {
+      let requiredKeys = ['id', 'name', 'genres', 'backstory', 'openingMessage', 'chatLink', 'avatarUrl', 'likes', 'createdAt'];
+      let optionalKeys = ['views'];
+      return data.keys().hasAll(requiredKeys)
+        && data.keys().hasOnly(requiredKeys.concat(optionalKeys))
+        && isValidId(data.id)
+        && data.name is string && data.name.size() <= 100
+        && data.genres is list && data.genres.size() <= 20
+        && data.backstory is string && data.backstory.size() <= 2000
+        && data.openingMessage is string && data.openingMessage.size() <= 1000
+        && data.chatLink is string && data.chatLink.size() <= 500
+        && data.avatarUrl is string && data.avatarUrl.size() <= 2000000
+        && data.likes is int
+        && (data.get('views', 0) is int)
+        && data.createdAt is int;
+    }
+
+    function isValidPuzzleImage(data) {
+      return data.keys().hasAll(['id', 'characterId', 'characterName', 'imageUrl', 'createdAt'])
+        && data.keys().hasOnly(['id', 'characterId', 'characterName', 'imageUrl', 'createdAt'])
+        && isValidId(data.id)
+        && isValidId(data.characterId)
+        && data.characterName is string && data.characterName.size() <= 100
+        && data.imageUrl is string && data.imageUrl.size() <= 2000000
+        && data.createdAt is int;
+    }
+
+    function isValidStickyNote(data) {
+      return data.keys().hasAll(['id', 'sender', 'content', 'color', 'x', 'y', 'createdAt'])
+        && data.keys().hasOnly(['id', 'sender', 'content', 'color', 'x', 'y', 'createdAt'])
+        && isValidId(data.id)
+        && data.sender is string && data.sender.size() <= 100
+        && data.content is string && data.content.size() <= 400
+        && data.color is string && data.color.size() <= 50
+        && (data.x is int || data.x is float)
+        && (data.y is int || data.y is float)
+        && data.createdAt is int;
+    }
+
+    function isValidComment(data) {
+      return data.keys().hasAll(['id', 'characterId', 'userId', 'userName', 'userPhoto', 'content', 'createdAt'])
+        && data.keys().hasOnly(['id', 'characterId', 'userId', 'userName', 'userPhoto', 'content', 'createdAt'])
+        && isValidId(data.id)
+        && isValidId(data.characterId)
+        && data.userId == request.auth.uid
+        && data.userName is string && data.userName.size() <= 100
+        && data.userPhoto is string && data.userPhoto.size() <= 2000
+        && data.content is string && data.content.size() <= 1000
+        && data.createdAt is int;
+    }
+
+    function isValidSiteConfig(data) {
+      let requiredKeys = ['id', 'updatedAt'];
+      let optionalKeys = ['backgroundUrl', 'customLogo'];
+      return data.keys().hasAll(requiredKeys)
+        && data.keys().hasOnly(requiredKeys.concat(optionalKeys))
+        && data.id == 'main'
+        && (data.get('backgroundUrl', '') is string && data.get('backgroundUrl', '').size() <= 2000)
+        && (data.get('customLogo', '') is string && data.get('customLogo', '').size() <= 2000000)
+        && data.updatedAt is int;
+    }
+
+    function isValidGenre(data) {
+      return data.keys().hasAll(['id', 'name', 'createdAt'])
+        && data.keys().hasOnly(['id', 'name', 'createdAt'])
+        && isValidId(data.id)
+        && data.name is string && data.name.size() <= 50
+        && data.createdAt is int;
+    }
+
+    function isValidAnnouncement(data) {
+      let requiredKeys = ['id', 'title', 'content', 'tag', 'createdAt', 'likes'];
+      let optionalKeys = ['isPinned'];
+      return data.keys().hasAll(requiredKeys)
+        && data.keys().hasOnly(requiredKeys.concat(optionalKeys))
+        && isValidId(data.id)
+        && data.title is string && data.title.size() <= 200
+        && data.content is string && data.content.size() <= 5000
+        && data.tag in ['Thông báo', 'Lịch ra mắt', 'Tâm sự', 'Sự kiện']
+        && data.createdAt is int
+        && data.likes is int;
+    }
+
+    // --- MATCH BLOCKS ---
+
+    match /characters {
+      allow list: if true;
+      match /{characterId} {
+        allow read: if true;
+        allow create: if isAdmin() && isValidCharacter(incoming());
+        allow update: if (isAdmin() && isValidCharacter(incoming())) ||
+                      (isSignedIn() && isValidCharacter(incoming()) && 
+                       incoming().diff(existing()).affectedKeys().hasOnly(['likes', 'views']));
+        allow delete: if isAdmin();
+      }
+    }
+
+    match /puzzle_images {
+      allow list: if true;
+      match /{imageId} {
+        allow read: if true;
+        allow create: if isSignedIn() && isValidPuzzleImage(incoming());
+        allow update: if isAdmin() && isValidPuzzleImage(incoming());
+        allow delete: if isAdmin();
+      }
+    }
+
+    match /sticky_notes {
+      allow list: if true;
+      match /{noteId} {
+        allow read: if true;
+        allow create: if isSignedIn() && isValidStickyNote(incoming());
+        allow update: if isAdmin() && isValidStickyNote(incoming());
+        allow delete: if isAdmin();
+      }
+    }
+
+    match /character_comments {
+      allow list: if true;
+      match /{commentId} {
+        allow read: if true;
+        allow create: if isSignedIn() && isValidComment(incoming()) && 
+                      exists(/databases/$(database)/documents/characters/$(incoming().characterId));
+        allow update: if false;
+        allow delete: if isAdmin() || (isSignedIn() && existing().userId == request.auth.uid);
+      }
+    }
+
+    match /site_config {
+      allow list: if true;
+      match /{configId} {
+        allow read: if true;
+        allow write: if isAdmin() && isValidSiteConfig(incoming());
+      }
+    }
+
+    match /genres {
+      allow list: if true;
+      match /{genreId} {
+        allow read: if true;
+        allow write: if isAdmin() && isValidGenre(incoming());
+      }
+    }
+
+    match /announcements {
+      allow list: if true;
+      match /{announcementId} {
+        allow read: if true;
+        allow create: if isAdmin() && isValidAnnouncement(incoming());
+        allow update: if (isAdmin() && isValidAnnouncement(incoming())) ||
+                      (isSignedIn() && isValidAnnouncement(incoming()) && 
+                       incoming().diff(existing()).affectedKeys().hasOnly(['likes']));
+        allow delete: if isAdmin();
+      }
+    }
+
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
