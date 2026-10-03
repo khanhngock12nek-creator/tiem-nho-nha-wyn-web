@@ -336,17 +336,17 @@ export const CharacterCardsView: React.FC<CharacterCardsViewProps> = ({
                 key={char.id}
                 className="group relative bg-white dark:bg-neutral-900 rounded-3xl border border-rose-100/90 dark:border-neutral-800 shadow-sm hover:shadow-xl hover:shadow-rose-500/10 transition-all duration-300 overflow-hidden flex flex-col"
               >
-                {/* Visual Avatar / Card Header */}
+                {/* Visual Avatar / Card Header - Scrollable to see full art */}
                 <div
+                  className="relative h-64 sm:h-72 bg-neutral-100 dark:bg-neutral-800 overflow-y-auto scrollbar-none cursor-pointer group/image"
                   onClick={() => onSelectCharacter(char)}
-                  className="relative h-56 bg-neutral-100 dark:bg-neutral-800 overflow-hidden cursor-pointer"
                 >
                   {char.avatarUrl ? (
                     <img
                       src={char.avatarUrl}
                       alt={char.name}
                       referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-auto block transition-transform duration-500 group-hover/image:scale-[1.02]"
                       onError={(e) => {
                         (e.target as HTMLElement).style.display = 'none';
                       }}
@@ -358,19 +358,19 @@ export const CharacterCardsView: React.FC<CharacterCardsViewProps> = ({
                     </div>
                   )}
 
-                  {/* Gradient Scrim */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/85 via-neutral-950/20 to-transparent" />
+                  {/* Gradient Scrim - Sticky to bottom */}
+                  <div className="sticky bottom-0 inset-x-0 h-20 bg-gradient-to-t from-neutral-950/90 via-neutral-950/40 to-transparent pointer-events-none" />
 
-                  {/* Top floating actions */}
-                  <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
+                  {/* Top floating actions - Sticky to top */}
+                  <div className="sticky top-3 right-3 flex items-center justify-end gap-1.5 z-10 h-0 overflow-visible pr-3">
                     {isAdmin && (
-                      <>
+                      <div className="flex gap-1.5 h-fit">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             if (onEditCharacter) onEditCharacter(char);
                           }}
-                          className="p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition cursor-pointer"
+                          className="p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition cursor-pointer shadow-sm"
                           title="Sửa nhân vật"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
@@ -380,12 +380,12 @@ export const CharacterCardsView: React.FC<CharacterCardsViewProps> = ({
                             e.stopPropagation();
                             if (onDeleteCharacter) onDeleteCharacter(char.id);
                           }}
-                          className="p-2 rounded-full bg-red-600/70 hover:bg-red-700 text-white backdrop-blur-md transition cursor-pointer"
+                          className="p-2 rounded-full bg-red-600/70 hover:bg-red-700 text-white backdrop-blur-md transition cursor-pointer shadow-sm"
                           title="Xóa nhân vật"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
-                      </>
+                      </div>
                     )}
 
                     {/* Heart button */}
@@ -394,7 +394,7 @@ export const CharacterCardsView: React.FC<CharacterCardsViewProps> = ({
                         e.stopPropagation();
                         onToggleFavorite(char.id);
                       }}
-                      className={`p-2 rounded-full backdrop-blur-md transition cursor-pointer ${
+                      className={`p-2 rounded-full backdrop-blur-md transition cursor-pointer h-fit ${
                         isFav
                           ? 'bg-rose-500 text-white shadow-md'
                           : 'bg-black/35 hover:bg-black/60 text-white'
@@ -405,12 +405,12 @@ export const CharacterCardsView: React.FC<CharacterCardsViewProps> = ({
                     </button>
                   </div>
 
-                  {/* Bottom info on image */}
-                  <div className="absolute bottom-3 left-4 right-4 text-white">
-                    <h3 className="text-xl font-bold font-serif-title tracking-wide drop-shadow-sm truncate">
+                  {/* Bottom info on image - Sticky to bottom */}
+                  <div className="sticky bottom-3 left-4 right-4 text-white z-10 h-0 overflow-visible flex flex-col justify-end pb-3 px-4">
+                    <h3 className="text-xl font-bold font-serif-title tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] truncate">
                       {char.name}
                     </h3>
-                    <div className="flex flex-wrap items-center gap-2 text-[10px] sm:text-[11px] text-white/80 mt-1">
+                    <div className="flex flex-wrap items-center gap-2 text-[10px] sm:text-[11px] text-white/90 mt-1">
                       <span className="flex items-center gap-1">
                         <Heart className="w-3 h-3 text-rose-400 fill-rose-400" />
                         <span className="font-mono">{char.likes || 0}</span>

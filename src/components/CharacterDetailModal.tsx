@@ -65,17 +65,17 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
         <div className="relative z-10 flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar">
           <div className="max-w-4xl mx-auto space-y-6">
             
-            {/* Main Visual Box */}
-            <div className="relative aspect-video sm:aspect-[16/9] bg-white dark:bg-neutral-900 rounded-2xl border-4 border-sky-200 dark:border-neutral-800 shadow-xl overflow-hidden group">
-                {/* Decorative Corners */}
-                <div className="absolute top-2 left-2 z-20 flex gap-1">
+            {/* Main Visual Box - Scrollable to see full art */}
+            <div className="relative h-[350px] sm:h-[500px] bg-white dark:bg-neutral-900 rounded-2xl border-4 border-sky-200 dark:border-neutral-800 shadow-xl overflow-y-auto custom-scrollbar group">
+                {/* Decorative Corners - Fixed to container so they don't scroll away */}
+                <div className="sticky top-2 left-2 z-20 flex gap-1 h-0 overflow-visible px-2">
                   <div className="w-2 h-2 rounded-full bg-rose-400" />
                   <div className="w-2 h-2 rounded-full bg-sky-400" />
                   <div className="w-2 h-2 rounded-full bg-emerald-400" />
                 </div>
                 
-                <div className="absolute top-2 right-4 z-20">
-                   <div className="px-2 py-0.5 rounded bg-black/40 backdrop-blur-md border border-white/20 text-[10px] font-black text-white italic tracking-widest">
+                <div className="sticky top-2 right-4 z-20 h-0 overflow-visible flex justify-end pr-4">
+                   <div className="px-2 py-0.5 rounded bg-black/40 backdrop-blur-md border border-white/20 text-[10px] font-black text-white italic tracking-widest h-fit">
                      LIVE PREVIEW
                    </div>
                 </div>
@@ -85,7 +85,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   <img
                     src={character.avatarUrl}
                     alt={character.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-auto block transition-transform duration-700 group-hover:scale-[1.02]"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-sky-50 dark:bg-neutral-800 text-sky-200">
@@ -93,8 +93,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   </div>
                 )}
 
-                {/* Bottom Overlay Info */}
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 flex items-end justify-between">
+                {/* Bottom Overlay Info - Sticky to bottom */}
+                <div className="sticky bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 flex items-end justify-between z-10">
                   <div className="space-y-1">
                     <h3 className="text-2xl font-black text-white italic tracking-tighter uppercase drop-shadow-md">
                       {character.name}
